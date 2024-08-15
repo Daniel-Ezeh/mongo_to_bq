@@ -1,2 +1,4 @@
 pymongo[srv]==3.10.1
 python-dotenv==0.13.0
+pymongo==4.8.0
+python-dotenv==1.0.1
