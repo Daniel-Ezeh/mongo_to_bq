@@ -4,8 +4,12 @@
 airflow-webserver.err
 airflow-webserver.log
 airflow-webserver.out
+airflow-webserver.pid
+__init__.py
 airflow.cfg
 airflow.db
 logs/
+/dags/__pycache__
+/__pycache__
 standalone_admin_password.txt
 webserver_config.py
