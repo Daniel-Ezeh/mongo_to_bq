@@ -1,2 +1,11 @@
 /.venv
 .env
+
+airflow-webserver.err
+airflow-webserver.log
+airflow-webserver.out
+airflow.cfg
+airflow.db
+logs/
+standalone_admin_password.txt
+webserver_config.py

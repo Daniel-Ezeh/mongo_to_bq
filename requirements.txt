@@ -1,3 +1,11 @@
 dnspython==2.6.1
-pymongo==4.8.0
+pymongo==3.13.0
 python-dotenv==1.0.1
+apache-airflow==2.8.4
+apache-airflow-providers-dbt-cloud==3.1.0
+apache-airflow-providers-mongo==3.1.1
+apache-airflow-providers-google==10.16.0
+apache-airflow-providers-amazon==8.19.0
+# apache-airflow-providers-celery==3.7.3
+importlib-metadata==6.11.0
+
