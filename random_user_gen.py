@@ -33,8 +33,7 @@ def get_random_user():
             'coordinates':"{" + f"latitude: {user_details['location']['coordinates']['latitude']}, longitude: {user_details['location']['coordinates']['longitude']}"+"}",
             'username': user_details['login']['username'],
             'dob': user_details['dob']['date'],
-            'phone': user_details['phone'],
-            'cell': user_details['cell'],
+            'phone': user_details['phone']
         }
         
         # json_data = json.dumps(user_info, indent=4)
