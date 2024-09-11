@@ -24,3 +24,8 @@ importlib-metadata==6.11.0
 # apache-airflow-providers-mongo==3.1.1
 # apache-airflow-providers-smtp==1.7.1
 # apache-airflow-providers-sqlite==3.8.2
+fastapi==0.114.0
+starlette==0.38.5
+uvicorn==0.30.6
+email_validator
+

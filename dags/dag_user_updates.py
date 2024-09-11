@@ -155,11 +155,6 @@ with TaskGroup("group_3", dag=dag) as third_doc:
     delay_task >> generate_update_3
 
 
-
-
-
-
-
 # Set the task in the DAG
 start\
 >> sampling_documents\
