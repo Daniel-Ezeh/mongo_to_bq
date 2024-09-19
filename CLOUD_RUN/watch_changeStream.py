@@ -16,6 +16,7 @@ MONGO_CLUSTER = os.environ['MONGO_CLUSTER']
 MONGO_DATA_BASE = os.environ['MONGO_DATA_BASE']
 PROJECT_ID = os.environ['PROJECT_ID']
 TOPIC_ID1 = os.environ['TOPIC_ID1']
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/nombauser/Desktop/trying-pubsub-2024-663b6e06baf8.json'
 
 
 cluster = quote_plus(f'{MONGO_CLUSTER}')
@@ -25,7 +26,6 @@ collection = "wallet_transactions"
 uri = f'{MONGODB_URI}{database}?retryWrites=true&w=majority'
 client = MongoClient(uri)
 myCollection = client[f'{database}'][f'{collection}']
-
 
 app = FastAPI()
 
@@ -41,6 +41,7 @@ def publish_to_pubsub(data):
         data = json.dumps(data).encode("utf-8")
         future = publisher.publish(topic_path, data)
         print(f"Published message: {data}")
+        print("Message sent successfully")
         return future.result()
     
     except Exception as e:
