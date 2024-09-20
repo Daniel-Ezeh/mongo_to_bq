@@ -10,7 +10,7 @@ SUBSCRIPTION1 = os.environ['SUBSCRIPTION1']
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/nombauser/Desktop/trying-pubsub-2024-663b6e06baf8.json'
 
 
-timeout = 5.0  # seconds to wait for new messages (set to None for indefinite listening)
+timeout = None # seconds to wait for new messages (set to None for indefinite listening)
 
 # Subscriber client
 subscriber = pubsub_v1.SubscriberClient()
