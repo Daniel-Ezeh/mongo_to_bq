@@ -77,12 +77,3 @@ if __name__ == "__main__":
     asyncio.run(listen_to_changes())
     # Run the FastAPI app
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
-
-# if __name__ == "__main__":
-#     # Start the change stream listener in a background task
-#     loop = asyncio.get_event_loop()
-#     loop.create_task(listen_to_changes())
-#     # Run the FastAPI app
-#     import uvicorn
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
