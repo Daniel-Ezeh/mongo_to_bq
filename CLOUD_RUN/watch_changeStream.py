@@ -1,8 +1,10 @@
 import os
 import json
+import time
 import asyncio
 import uvicorn
 from pymongo import MongoClient
+from pymongo.errors import ConfigurationError, ConnectionFailure
 from bson import json_util
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
@@ -48,22 +50,29 @@ def publish_to_pubsub(data):
         print(f"error: {e}")
 
 
-async def listen_to_changes():
+async def listen_to_changes(max_retries=5, base_delay=1, multiplier=2):
     """
     Listens to the MongoDB change stream and publishes changes to Pub/Sub.
     """
     print("*_"*30)
-    try:
-        # Open the MongoDB change stream
-        with myCollection.watch(full_document='updateLookup') as stream:
-            print("Listening for changes...")
-            for change in stream:
-                # The 'change' document contains details of the operation
-                change = json.dumps(change, default=json_util.default)
-                print(f"Received change: {change}")
-                publish_to_pubsub(change)
-    except Exception as e:
-        print(f"Error: {e}")
+    retries = 0
+    while retries < max_retries:
+        try:
+            # Open the MongoDB change stream
+            with myCollection.watch(full_document='updateLookup') as stream:
+                print("Listening for changes...")
+                for change in stream:
+                    # The 'change' document contains details of the operation
+                    change = json.dumps(change, default=json_util.default)
+                    print(f"Received change: {change}")
+                    publish_to_pubsub(change)
+        except Exception as e:
+            print(f"Error: {e}")
+            retries += 1
+            delay = base_delay * (multiplier ** (retries - 1))
+            print(f"Retrying in {delay} seconds...")
+            time.sleep(delay)
+    raise ConnectionError(f"Failed to connect to MongoDB after {max_retries} retries")
 
 
 @app.get("/")

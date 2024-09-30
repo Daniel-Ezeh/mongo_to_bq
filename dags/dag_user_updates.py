@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 from pymongo import MongoClient
 import logging
 import os
+import time
 import random
 from pprint import pprint
 import json
@@ -39,21 +40,38 @@ logging.basicConfig(
 
 
 def get_random_document_id(**kwargs):
-    pipeline = [
-        {"$sample": {"size": 3}}  # Randomly select 2 document
-    ]
-    id_list = []
-    random_doc = myCollection.aggregate(pipeline)
-    for doc in random_doc:
-        docf = json.dumps(str(doc["uid"]))
-        id_list.append(docf.strip('"'))
-    kwargs['ti'].xcom_push(key='uid', value=id_list)
-    logging.info(id_list)
-    return id_list
+    max_retries=5
+    base_delay=1
+    multiplier=2
+    retries = 0
+    while retries < max_retries:
+        try:
+            pipeline = [
+                {"$sample": {"size": 3}}  # Randomly select 2 document
+            ]
+            id_list = []
+            random_doc = myCollection.aggregate(pipeline)
+            for doc in random_doc:
+                docf = json.dumps(str(doc["uid"]))
+                id_list.append(docf.strip('"'))
+            kwargs['ti'].xcom_push(key='uid', value=id_list)
+            logging.info(id_list)
+            return id_list
+        except Exception as e:
+            print(f"Error: {e}")
+            retries += 1
+            delay = base_delay * (multiplier ** (retries - 1))
+            print(f"Retrying in {delay} seconds...")
+            time.sleep(delay)
+    raise ConnectionError(f"Failed to connect to MongoDB after {max_retries} retries")
 
 
 
 def update_document(x, **kwargs):
+    max_retries=5 
+    base_delay=1 
+    multiplier=2
+    retries = 0
     ti = kwargs['ti']
     data = ti.xcom_pull(task_ids='sampling_various_uids', key='uid')
     # uid = str(json.dumps(str(data[0])).replace('"',''))
@@ -66,19 +84,28 @@ def update_document(x, **kwargs):
             "product": random.choice(PRODUCT_PURCHASED)
         }
     }
-    result = myCollection.find_one_and_update(
-        filter={"uid":uid},
-        update = update_operation, 
-        return_document=True,
-        upsert=True
-        )
-    if result:
-        print(f"Document {uid} updated successfully")
-        aa = myCollection.find_one(uid)
-        print(json.dumps(str(aa)))
-        logging.info(aa)
-    else:
-        print("No document found or no changes made")
+    while retries < max_retries:
+        try:
+            result = myCollection.find_one_and_update(
+                filter={"uid":uid},
+                update = update_operation, 
+                return_document=True,
+                upsert=True
+                )
+            if result:
+                print(f"Document {uid} updated successfully")
+                aa = myCollection.find_one(uid)
+                print(json.dumps(str(aa)))
+                logging.info(aa)
+            else:
+                print("No document found or no changes made")
+        except Exception as e:
+            print(f"Error: {e}")
+            retries += 1
+            delay = base_delay * (multiplier ** (retries - 1))
+            print(f"Retrying in {delay} seconds...")
+            time.sleep(delay)
+    raise ConnectionError(f"Failed to connect to MongoDB after {max_retries} retries")
 
 
 # The Main flow of the DAG
