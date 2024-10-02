@@ -1,30 +1,31 @@
-# using the official lightweight Python image
-FROM  python:3.10-slim
+# Use an official Python runtime as a base image
+FROM python:3.10-slim
 
-# Setting the environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Setting the working directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Installing dependencies
+# Copy the requirements.txt first to leverage Docker's caching mechanism
 COPY requirements.txt .
 
+# Install any necessary dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Coping the application code
+# Copy the rest of the application code into the container
 COPY . .
 
-# Exposing the port that FastAPI will run on
+# Expose the port the app will run on
 EXPOSE 8088
 
-# The command to run the FastAPI app using uvicorn
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8088", "app:app"]
+# # Environment variables for MongoDB and Google Cloud Pub/Sub
+# ENV MONGODB_URI=<your_mongodb_uri>
+# ENV MONGO_CLUSTER=<your_mongo_cluster>
+# ENV MONGO_DATA_BASE=<your_database_name>
+# ENV PROJECT_ID=<your_project_id>
+# ENV TOPIC_ID1=<your_topic_id1>
+
+# # Set the Google Application Credentials environment variable
+# ENV GOOGLE_APPLICATION_CREDENTIALS=/app/trying-pubsub-2024-663b6e06baf8.json
+
+# Run the FastAPI app using Uvicorn
+CMD ["uvicorn", "watch_changeStream:app", "--host", "0.0.0.0", "--port", "8088"]
