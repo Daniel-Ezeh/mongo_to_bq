@@ -1,9 +1,10 @@
 steps:
-# Installing dependencies
-- id: installing python
-  name: python
-  entrypoint: pip
-  args: ['install', '-r', 'requirements.txt', "--user"]
+
+# # Installing dependencies
+# - id: installing python
+#   name: python
+#   entrypoint: pip
+#   args: ['install', '-r', 'requirements.txt', "--user"]
 
 # Building the container image
 - id: docker build
@@ -19,6 +20,7 @@ steps:
 # Deploy container image to Cloud Run
 - id: Deploy to Cloud Run
   name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: "bash"
   dir: "/Users/nombauser/Desktop/GIT/my_git_repos/mongo_to_bq/CLOUD_RUN"
   secretEnv:
     - MONGODB_URI
@@ -26,17 +28,20 @@ steps:
     - MONGO_DATA_BASE
     - PROJECT_ID
     - TOPIC_ID1
-  entrypoint: "bash"
   args:
   - "-c"
-  - |
-    gcloud run deploy watch-changestream-for-pubsub \
+  - gcloud run deploy watch-changestream-for-pubsub \
     --image gcr.io/$PROJECT_ID/watch-changestream-for-pubsub \
-    --region europe-west2 \
+    --region europe-west1 \
     --platform managed \
     --allow-unauthenticated \
     --min-instances 1 \
     --max-instances 1 \
+    --set-env-vars "MONGODB_URI=$$MONGODB_URI
+    --set-env-vars "MONGO_CLUSTER=$$MONGO_CLUSTER
+    --set-env-vars "MONGO_DATA_BASE=$$MONGO_DATA_BASE
+    --set-env-vars "PROJECT_ID=$$PROJECT_ID
+    --set-env-vars "TOPIC_ID1=$$TOPIC_ID1
 
 availableSecrets:
   secretManager:
@@ -53,3 +58,5 @@ availableSecrets:
 
 images:
 - gcr.io/$PROJECT_ID/watch-changestream-for-pubsub
+
+timeout: 3600s
