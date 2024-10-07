@@ -39,18 +39,6 @@ airflow scheduler
 
 BUILDING THE IMAGE
 
-ENABLE CLOUD BUILD API AND CLOUD RUN API
-gcloud services enable cloudbuild.googleapis.com run.googleapis.com
-
-
-BUILD YOUR IMAGE
-gcloud builds submit --tag gcr.io/[PROJECT_ID]/[IMAGE_NAME]
-
-
-docker build -t your_image_name .
-docker run --env-file .env -p 8000:8000 your_image_name
-
-
 TO SIGN IN AND SET UP GOOGLE ACCOUNT
 gcloud auth list
 gcloud config set account `ACCOUNT`
@@ -58,6 +46,24 @@ gcloud auth login
 gcloud projects list
 gcloud auth application-default login
 gcloud config set project [PROJECT_ID]
+
+
+export PROJECT_ID=$(gcloud config get-value project)
+
+Run the **creeate-secret.sh** to create necessary secret for build.
+
+
+ENABLE CLOUD BUILD API AND CLOUD RUN API
+gcloud services enable cloudbuild.googleapis.com run.googleapis.com
+
+
+BUILD YOUR IMAGE
+gcloud builds submit --tag gcr.io/[PROJECT_ID]/[IMAGE_NAME] .
+   
+gcloud builds submit --region=europe-west1 --tag gcr.io/trying-pubsub-2024/watch-changestream-to-pubsub .
+
+
+
 
 
 

@@ -17,7 +17,7 @@ MONGO_CLUSTER = os.getenv('MONGO_CLUSTER')
 MONGO_DATA_BASE = os.getenv('MONGO_DATA_BASE')
 PROJECT_ID = os.getenv("PROJECT_ID")
 TOPIC_ID1 = os.getenv('TOPIC_ID1')
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/nombauser/Desktop/trying-pubsub-2024-663b6e06baf8.json'
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/nombauser/Desktop/trying-pubsub-2024-663b6e06baf8.json'
 
 
 cluster = quote_plus(f'{MONGO_CLUSTER}')
