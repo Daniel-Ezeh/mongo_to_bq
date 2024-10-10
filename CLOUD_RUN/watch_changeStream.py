@@ -11,12 +11,11 @@ from google.cloud import pubsub_v1
 from datetime import datetime
 
 load_dotenv()
-MONGODB_URI = os.environ['MONGODB_URI']
-MONGO_CLUSTER = os.environ['MONGO_CLUSTER']
-MONGO_DATA_BASE = os.environ['MONGO_DATA_BASE']
-PROJECT_ID = os.environ['PROJECT_ID']
-TOPIC_ID1 = os.environ['TOPIC_ID1']
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/nombauser/Desktop/trying-pubsub-2024-663b6e06baf8.json'
+MONGODB_URI = os.getenv('MONGODB_URI')
+MONGO_CLUSTER = os.getenv('MONGO_CLUSTER')
+MONGO_DATA_BASE = os.getenv('MONGO_DATA_BASE')
+PROJECT_ID = os.getenv("PROJECT_ID")
+TOPIC_ID1 = os.getenv('TOPIC_ID1')
 
 
 cluster = quote_plus(f'{MONGO_CLUSTER}')
