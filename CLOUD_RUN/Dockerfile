@@ -1,5 +1,8 @@
-# using the official lightweight Python image
-FROM  python:3.10-slim
+# Use an official Python runtime as a base image
+FROM python:3.10-alpine
+
+# Allow statements and log messages to immediately appear in the Cloud Run logs
+ENV PYTHONUNBUFFERED True
 
 # Setting the environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -14,14 +17,14 @@ RUN apt-get update && apt-get install -y \
 # Setting the working directory inside the container
 WORKDIR /app
 
-# Installing dependencies
-COPY requirements.txt .
+# Copy the requirements.txt first to leverage Docker's caching mechanism
+COPY requirements.txt ./
 
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Coping the application code
-COPY . .
+# Copy the rest of the application code into the container
+COPY . ./
 
 # Exposing the port that FastAPI will run on
 EXPOSE 8088
