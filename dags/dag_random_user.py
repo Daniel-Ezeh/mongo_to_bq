@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import sys
+import time
 import os
 
 # Add the parent directory to the sys.path
@@ -23,13 +24,27 @@ default_args = {
 }
 
 def insert_doc():
+    max_retries=5
+    base_delay=1
+    multiplier=2
     MONGODB_URI = os.environ['MONGODB_URI']
+    retries = 0
+    while retries < max_retries:
+        try:
+            uri = f"{MONGODB_URI}?retryWrites=true&w=majority&appName=mongo-to-bq"
+            client = MongoClient(uri)
+            myCollection = client['customers']['wallet_transactions']
+            customer = ru.get_random_user()
+            myCollection.insert_one(customer)
+        except Exception as e:
+            print(f"Error: {e}")
+            retries += 1
+            delay = base_delay * (multiplier ** (retries - 1))
+            print(f"Retrying in {delay} seconds...")
+            time.sleep(delay)
+    raise ConnectionError(f"Failed to connect to MongoDB after {max_retries} retries")
 
-    uri = f"{MONGODB_URI}?retryWrites=true&w=majority&appName=mongo-to-bq"
-    client = MongoClient(uri)
-    myCollection = client['customers']['wallet_transactions']
-    customer = ru.get_random_user()
-    myCollection.insert_one(customer)
+    
 
 # Define the DAG
 with DAG(

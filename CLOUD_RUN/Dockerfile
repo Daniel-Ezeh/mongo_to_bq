@@ -1,33 +1,33 @@
 # Use an official Python runtime as a base image
+
 FROM python:3.10-alpine
 
 # Allow statements and log messages to immediately appear in the Cloud Run logs
 ENV PYTHONUNBUFFERED True
 
-# Setting the environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Setting the working directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
 # Copy the requirements.txt first to leverage Docker's caching mechanism
+
 COPY requirements.txt ./
 
+
+# Install any necessary dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
+
 COPY . ./
 
-# Exposing the port that FastAPI will run on
+
+
+# # Expose the port the app will run on
 EXPOSE 8088
 
-# The command to run the FastAPI app using uvicorn
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8088", "app:app"]
+
+
+# Run the FastAPI app using Uvicorn
+CMD ["uvicorn", "watch_changeStream:app", "--host", "0.0.0.0", "--port", "8088"]
