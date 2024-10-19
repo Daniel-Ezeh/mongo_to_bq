@@ -60,3 +60,15 @@ BUILD YOUR IMAGE
 gcloud builds submit --tag gcr.io/[PROJECT_ID]/[IMAGE_NAME] .
    
 gcloud builds submit --region=europe-west1 --tag gcr.io/trying-pubsub-2024/watch-changestream-to-pubsub .
+
+BUILDING THE IMAGE IN DOCKER
+docker build -t change_stream_python .
+
+
+FOR THE DOCKER BUILD TESTING
+  docker run --publish 8088:8080 \
+  -v /Users/nombauser/Desktop/GIT/my_git_repos/mongo_to_bq/trying-pubsub-2024-663b6e06baf8.json:/app/trying-pubsub-2024-663b6e06baf8.json \
+  -e GOOGLE_APPLICATION_CREDENTIALS="/app/trying-pubsub-2024-663b6e06baf8.json" \
+  --env-file /Users/nombauser/Desktop/GIT/my_git_repos/mongo_to_bq/.env \
+  --name myapp \
+  change_stream_python
