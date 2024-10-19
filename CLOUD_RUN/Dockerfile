@@ -1,5 +1,5 @@
 # Use an official Python runtime as a base image
-FROM python:3.10-alpine
+FROM python:3.10-slim
 
 # Allow statements and log messages to immediately appear in the Cloud Run logs
 ENV PYTHONUNBUFFERED True
@@ -30,4 +30,5 @@ COPY . ./
 EXPOSE 8088
 
 # The command to run the FastAPI app using uvicorn
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8088", "app:app"]
+CMD ["uvicorn", "watch_changeStream:app", "--host", "0.0.0.0", "--port", "8088"]
+# CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8088", "app:app"]
