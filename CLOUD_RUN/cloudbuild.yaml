@@ -45,15 +45,15 @@ steps:
 
 availableSecrets:
   secretManager:
-  - versionName: proprojects/34188081344/secrets/MONGODB_URI/versions/latest
+  - versionName: projects/trying-pubsub-2024/secrets/MONGODB_URI/versions/latest
     env: 'MONGODB_URI'
-  - versionName: proprojects/34188081344/secrets/MONGO_CLUSTER/versions/latest
+  - versionName: projects/trying-pubsub-2024/secrets/MONGO_CLUSTER/versions/latest
     env: 'MONGO_CLUSTER'
-  - versionName: proprojects/34188081344/secrets/MONGO_DATA_BASE/versions/latest
+  - versionName: projects/trying-pubsub-2024/secrets/MONGO_DATA_BASE/versions/latest
     env: 'MONGO_DATA_BASE'
-  - versionName: proprojects/34188081344/secrets/PROJECT_ID/versions/latest
+  - versionName: projects/trying-pubsub-2024/secrets/PROJECT_ID/versions/latest
     env: 'PROJECT_ID'
-  - versionName: proprojects/34188081344/secrets/TOPIC_ID1/versions/latest
+  - versionName: projects/trying-pubsub-2024/secrets/TOPIC_ID1/versions/latest
     env: 'TOPIC_ID1'
 
 images:
