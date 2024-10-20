@@ -58,7 +58,7 @@ availableSecrets:
     env: 'TOPIC_ID1'
 
 images:
-- gcr.io/$PROJECT_ID/watch-changestream-for-pubsub
+- gcr.io/$PROJECT_ID/watch-changestream-to-pubsub 
 
 options:
   logging: CLOUD_LOGGING_ONLY
