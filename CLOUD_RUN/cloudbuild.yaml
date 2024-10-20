@@ -9,7 +9,7 @@ steps:
 # Building the container image
 - id: docker build
   name: 'gcr.io/cloud-builders/docker'
-  # dir: "/Users/nombauser/Desktop/GIT/my_git_repos/mongo_to_bq/CLOUD_RUN"
+  dir: "CLOUD_RUN"
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/watch-changestream-for-pubsub', '.']
 
 # Push the container image to Container Registry
@@ -21,7 +21,7 @@ steps:
 - id: Deploy to Cloud Run
   name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: "bash"
-  # dir: "/Users/nombauser/Desktop/GIT/my_git_repos/mongo_to_bq/CLOUD_RUN"
+  dir: "CLOUD_RUN"
   secretEnv:
     - MONGODB_URI
     - MONGO_CLUSTER
