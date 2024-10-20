@@ -10,12 +10,12 @@ steps:
 - id: docker build
   name: 'gcr.io/cloud-builders/docker'
   dir: "CLOUD_RUN"
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/watch-changestream-for-pubsub', '.']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/watch-changestream-to-pubsub', '.']
 
 # Push the container image to Container Registry
 - id: docker push
   name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/watch-changestream-for-pubsub']
+  args: ['push', 'gcr.io/$PROJECT_ID/watch-changestream-to-pubsub']
 
 # Deploy container image to Cloud Run
 - id: Deploy to Cloud Run
@@ -31,8 +31,8 @@ steps:
   args:
   - "-c"
   - |
-  - gcloud run deploy watch-changestream-for-pubsub \
-    --image gcr.io/$PROJECT_ID/watch-changestream-for-pubsub \
+  - gcloud run deploy watch-changestream-to-pubsub \
+    --image gcr.io/$PROJECT_ID/watch-changestream-to-pubsub \
     --region europe-west1 \
     --platform managed \
     --allow-unauthenticated \
