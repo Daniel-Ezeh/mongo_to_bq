@@ -30,6 +30,7 @@ steps:
     - TOPIC_ID1
   args:
   - "-c"
+  - |
   - gcloud run deploy watch-changestream-for-pubsub \
     --image gcr.io/$PROJECT_ID/watch-changestream-for-pubsub \
     --region europe-west1 \
