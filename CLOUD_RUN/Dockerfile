@@ -2,7 +2,7 @@
 FROM python:3.10-slim
 
 # Allow statements and log messages to immediately appear in the Cloud Run logs
-ENV PYTHONUNBUFFERED True
+ENV PYTHONUNBUFFERED=True
 
 # Setting the environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -29,6 +29,5 @@ COPY . ./
 # Exposing the port that FastAPI will run on
 EXPOSE 8088
 
-# The command to run the FastAPI app using uvicorn
-CMD ["uvicorn", "watch_changeStream:app", "--host", "0.0.0.0", "--port", "8088"]
-# CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8088", "app:app"]
+# Run the application
+CMD ["python3", "watch_changeStream.py"]
