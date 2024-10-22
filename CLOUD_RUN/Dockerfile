@@ -30,5 +30,5 @@ COPY . ./
 EXPOSE 8088
 
 # Run the application
-# CMD ["python3", "watch_changeStream.py"]
-CMD exec uvicorn watch_changeStream:app --port 8088 --host 0.0.0.0
+CMD ["python3", "watch_changeStream.py"]
+# CMD exec uvicorn watch_changeStream:app --port 8088 --host 0.0.0.0
